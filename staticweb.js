@@ -1,11 +1,19 @@
+//Imports
 var express = require('express')
 var config = require('./config.json')
 
-var app = express()
+//Setup
+var port = process.env.PORT || config.port //Should work on Heroku like this
+var path = __dirname + "/" + config.dir
+var app = express();
 
+//Configure
+app.configure(function(){
+	app.use(express.static(path))
+	app.use(express.logger())
+})
 
-//Heroku compliant method of getting port
-var port = process.env.PORT || config.port
+//Start
 app.listen(port, function() {
-	console.log("Listening on " + port)
-});
+	console.log("Listening on " + port + " and serving files from " + path)
+})
